@@ -47,13 +47,17 @@ Compilers:
 Dependency injection ?? :D
 ---
 Define custom indexes which you can use in your source to create dependencies.
-for example you create a person class dependency.
-You mark the dependency using the #dep.start tag (this is customizable) 
-(you can use anything, not only classes ofc.
 
 
 Example
 ---
+A simple example of what you can do with this stuff
+as if i where you, jo.
+
+I create a person class dependency.
+I mark the dependency using the #dep.start tag (this is customizable) 
+(you can mark & compile anything in any file (or any file), but for now i use a python dependency as an example)
+
 **person.model.py**
 ```
 #dep.start PersonModel
@@ -68,7 +72,7 @@ class Person(SyncanoObject):
 ```
 
 
-Then in your awesome script you can develop like you normally would
+Then in my awesome script you can develop like you normally would
 and compile it to scripts hosted on syncano.
 
 
