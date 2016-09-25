@@ -11,42 +11,11 @@ Features
 - Tracable/debug script compiler for online debug results. something like https://github.com/mihneadb/python-execution-trace
 - yuml compiler (create uml diagrams from ur classes, and use dep injection for importing them to create nice uml diagrams) (see http://yuml.me/)
 
-**keep reading**
-
-Indexing
-It is possible to define your own indexes for
-- projects
-- packages
-- files
-- items (regions in files)
-
-The framework automaticly generates the python code for the manager which you can use to interact with your indexed files.
-Using compilers it is possible to compile your indexed sources to for example.
-- syncano python models (ORM for your syncano classes)
-- scripts with injected source code (for example your models, custom functions etc)
-- compile your scripts and write them to the syncano cli script folder for synchronization
-
-I am working on several compilers
----
-Dependency injection compiler:
-Inject code in your scripts and generate scripts that get deployed on syncano.
-
-
-Debug compiler:
-with this compiler you can compile your python script to a tracable script which records everything when the script is executed and creates a debuggable json file which you can use in an app to track exactly what happened in your script when it ran (save these files to your syncano project so you can track errors, attacks, bugs)
-
-
-
-Compilers:
----
-- debug compiler
-- imports injection compiler
-- python model copiler
-- yuml diagram compiler
 
 Dependency injection ?? :D
 ---
 Define custom indexes which you can use in your source to create dependencies.
+Indexes ? check explanation after example.
 
 
 Example
@@ -118,19 +87,50 @@ i write to a custom file
 i then deploy the script
 
 
+
+
+
 Indexing ??
 ---
-No restrictions where your source is.
-index your files with .index files and use your source to compile it
+It is possible to define your own indexes for
+- projects
+- packages
+- files
+- items (regions in files)
 
+The framework automaticly generates the python code for the manager which you can use to interact with your indexed files.
+Using compilers it is possible to compile your indexed sources to for example.
+- syncano python models (ORM for your syncano classes)
+- scripts with injected source code (for example your models, custom functions etc)
+- compile your scripts and write them to the syncano cli script folder for synchronization
+
+
+**No restrictions where your source files/dirs are located. **
+index your files with .index files and use your source manager to compile it to the format you whish.
 working on documentation compiler as well, to easily generate docs for on github.
 
 
 
+Compilers:
+---
+- debug compiler
+- imports injection compiler
+- python model copiler
+- yuml diagram compiler
 
-seamless integration with syncano-cli for ez development.
 
-**WORK IN PROGRESS**
+Dependency injection compiler:
+Inject code in your scripts and generate scripts that get deployed on syncano.
+
+
+Debug compiler:
+with this compiler you can compile your python script to a tracable script which records everything when the script is executed and creates a debuggable json file which you can use in an app to track exactly what happened in your script when it ran (save these files to your syncano project so you can track errors, attacks, bugs)
+
+
+
+**seamless integration with syncano-cli for ez development.**
+
+**WORK IN PROGRESS** 
 WIP WIP WIP
 
 cheers
