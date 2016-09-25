@@ -2,6 +2,7 @@
 Code your source (code), ez customizable python and syncano development framework (WIP)
 
 Features
+---
 - Create indexes for your type of files
 - Use your source as if it is a python class, (straight forward workflows for compiling, debugging, deploying)
 - Custom generators for models, scripts, projects, packages, you name it.)
@@ -10,6 +11,7 @@ Features
 - Tracable/debug script compiler for online debug results. something like https://github.com/mihneadb/python-execution-trace
 - yuml compiler (create uml diagrams from ur classes, and use dep injection for importing them to create nice uml diagrams) (see http://yuml.me/)
 
+**keep reading**
 
 Indexing
 It is possible to define your own indexes for
@@ -102,7 +104,11 @@ working on documentation compiler as well, to easily generate docs for on github
 
 
 
+
 seamless integration with syncano-cli for ez development.
 
+**WORK IN PROGRESS**
 WIP WIP WIP
+
+cheers
 
