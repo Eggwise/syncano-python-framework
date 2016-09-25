@@ -12,13 +12,15 @@ Features
 - yuml compiler (create uml diagrams from ur classes, and use dep injection for importing them to create nice uml diagrams) (see http://yuml.me/)
 
 
+**keep reading**
+
 Dependency injection ?? :D
 ---
 Define custom indexes which you can use in your source to create dependencies.
 Indexes ? check explanation after example.
 
 
-Example
+Example: Get a feeling
 ---
 A simple example of what you can do with this stuff
 as if i where you, jo.
