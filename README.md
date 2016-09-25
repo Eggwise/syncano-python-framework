@@ -43,15 +43,15 @@ Compilers:
 - yuml diagram compiler
 
 Dependency injection ?? :D
-
+---
 Define custom indexes which you can use in your source to create dependencies.
 for example you create a person class dependency.
 You mark the dependency using the #dep.start tag (this is customizable) 
 (you can use anything, not only classes ofc.
 
 
-person.model.py
-'''
+**person.model.py**
+```
 #dep.start PersonModel
 
 class Person(SyncanoObject):
@@ -61,15 +61,15 @@ class Person(SyncanoObject):
 #dep.end 
 
 
-'''
+```
 
 
 Then in your awesome script you can develop like you normally would
 and compile it to scripts hosted on syncano.
 
 
-test.script.py
-'''
+**test.script.py**
+```
 from models import PersonModel
 from project import source
 #region script.start
@@ -91,9 +91,10 @@ person.save
 
 source.from_this().region('script.start').compile.deploy()
 
-'''
+```
 
-#Indexing ??
+Indexing ??
+---
 No restrictions where your source is.
 index your files with .index files and use your source to compile it
 
