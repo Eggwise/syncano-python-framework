@@ -14,11 +14,7 @@ Features
 
 **keep reading**
 
-Dependency injection ?? :D
----
-Define custom indexes which you can use in your source to create dependencies.
-Indexes ? check explanation after example.
-
+** no matter where and how your source it, manage and transform/compile it how you whish **
 
 Example: Get a feeling
 ---
