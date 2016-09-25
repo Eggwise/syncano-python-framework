@@ -47,7 +47,7 @@ and compile it to scripts hosted on syncano.
 from models import PersonModel
 from project import source
 
-source.from_this().region('epic_script').inject.write('custom_name').deploy()
+source.from_this().region('epic_script').inject.write('custom_name.py').deploy()
 source.stop
 
 
