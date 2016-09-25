@@ -1,5 +1,5 @@
 # syncano-python-framework
-(Coming soon) Unofficial syncano framework. 
+Programm your source, ez customizable python and syncano development framework (WIP)
 
 Features
 - Create indexes for your type of files
