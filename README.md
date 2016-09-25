@@ -52,6 +52,8 @@ You mark the dependency using the #dep.start tag (this is customizable)
 (you can use anything, not only classes ofc.
 
 
+Example
+---
 **person.model.py**
 ```
 #dep.start PersonModel
@@ -74,7 +76,12 @@ and compile it to scripts hosted on syncano.
 ```
 from models import PersonModel
 from project import source
-#region script.start
+
+source.from_this().region('epic_script').inject.write('custom_name').deploy()
+source.stop
+
+
+#region.start epic_script
 
 #inject PersonModel
 
@@ -84,16 +91,28 @@ from project import source
 from models import PersonModel
 --
 
-
 person = PersonModel(**ARGS)
 person.name = 'test'
 person.save
 
-#region script.end
+#region.end epic_script
 
-source.from_this().region('script.start').compile.deploy()
+
 
 ```
+In this script i created an indexed item using the 'region' index and my . 
+This is the region i want to be compiled for deployment on my syncano instance.
+
+I mark the injection point for the person model.
+Or (more ez) i tag the import i want to be injected in my script at compilation.
+
+Then at the top of script i get the source manager from this script
+now i got the manager pointing at my script.
+i select the region i want to be compiled
+i inject the dependencies 
+i write to a custom file
+i then deploy the script
+
 
 Indexing ??
 ---
