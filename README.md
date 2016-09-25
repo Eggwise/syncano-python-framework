@@ -11,10 +11,9 @@ Features
 - Tracable/debug script compiler for online debug results. something like https://github.com/mihneadb/python-execution-trace
 - yuml compiler (create uml diagrams from ur classes, and use dep injection for importing them to create nice uml diagrams) (see http://yuml.me/)
 
+**no matter where and how your source it, manage and transform/compile it how you whish**
 
 **keep reading**
-
-** no matter where and how your source it, manage and transform/compile it how you whish **
 
 Example: Get a feeling
 ---
