@@ -1,5 +1,5 @@
 # syncano-python-framework
-Programm your source, ez customizable python and syncano development framework (WIP)
+Code your source (code), ez customizable python and syncano development framework (WIP)
 
 Features
 - Create indexes for your type of files
