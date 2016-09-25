@@ -42,6 +42,65 @@ Compilers:
 - python model copiler
 - yuml diagram compiler
 
+Dependency injection ?? :D
+
+Define custom indexes which you can use in your source to create dependencies.
+for example you create a person class dependency.
+You mark the dependency using the #dep.start tag (this is customizable) 
+(you can use anything, not only classes ofc.
+
+
+person.model.py
+'''
+#dep.start PersonModel
+
+class Person(SyncanoObject):
+  ....
+  ....
+  
+#dep.end 
+
+
+'''
+
+
+Then in your awesome script you can develop like you normally would
+and compile it to scripts hosted on syncano.
+
+
+test.script.py
+'''
+from models import PersonModel
+from project import source
+#region script.start
+
+#inject PersonModel
+
+(OR JUST USE)
+---
+#injectable
+from models import PersonModel
+--
+
+
+person = PersonModel(**ARGS)
+person.name = 'test'
+person.save
+
+#region script.end
+
+source.from_this().region('script.start').compile.deploy()
+
+'''
+
+#Indexing ??
+No restrictions where your source is.
+index your files with .index files and use your source to compile it
+
+working on documentation compiler as well, to easily generate docs for on github.
+
+
+
 seamless integration with syncano-cli for ez development.
 
 WIP WIP WIP
