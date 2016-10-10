@@ -1,0 +1,8 @@
+to create your own index create an file with the suffix defined for the identifier
+so for example:
+to create an index for json files
+create a file json.file.index and place it somewhere in your workspace
+
+NOTE:
+
+the index file must be somewhere in a folder above the root folder
