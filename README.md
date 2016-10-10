@@ -13,7 +13,10 @@ Features
 
 **no matter where and how/what your source is, manage and transform/compile it how you whish**
 
-**keep reading**
+#NOTE:
+## readme underneath here is outdated. dont use the examples.
+## documentation and tutorials coming soon
+
 
 Example: Get a feeling
 ---
