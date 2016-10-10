@@ -57,7 +57,7 @@ class FileManager(SourceManagerBase):
                     's': now.second,
                     'extension': source_component.extension
                 }
-                name = cls.DEFAULT_FILENAME.format(name_format_args)
+                name = cls.DEFAULT_FILENAME.format(**name_format_args)
 
             if folder is None:
                 folder = source_component.folder
