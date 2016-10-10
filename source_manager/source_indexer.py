@@ -3,8 +3,8 @@ import logging
 import os
 import re
 
-from dev.source_manager.models.indexer import IndexedFile, SourceFile, IndexedItem, Source, Indexed, Index, Indices, Printable, SourceComponentContainer
-from dev.utils import find_dirs, merge, LOG_CONSTANTS
+from dist.source_manager.models.indexer import IndexedFile, SourceFile, IndexedItem, Source, Indexed, Index, Indices, Printable, SourceComponentContainer
+from dist.utils import find_dirs, merge, LOG_CONSTANTS
 
 
 # @pretty_print

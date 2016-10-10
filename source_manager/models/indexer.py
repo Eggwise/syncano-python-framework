@@ -3,9 +3,9 @@ from typing import List
 import logging, copy
 
 
-from dev import source_manager
+from dist import source_manager
 
-
+from ..source_manager import FileManager
 
 
 from dev.utils import LOG_CONSTANTS
@@ -229,6 +229,16 @@ class SourceFile(SourceComponent):
         with open(path) as f:
             source = f.read()
             return source
+
+    @property
+    def folder(self):
+        #TODO TEST
+        return os.path.realpath(self.dirname)
+
+    @property
+    def extension(self):
+        #TODO TEST
+        return self.filename.split('.')[-1]
 
     @property
     def dirname(self):
@@ -574,6 +584,11 @@ class Indices(Printable):
 
 
 class IndexedFile(SourceFile, SourceComponent):
+
+
+
+    MANAGER = FileManager
+
     def __init__(self, name: str, path: str, index: Index, source=None):
         self.index = index
         super().__init__(name, path, source=source)
@@ -585,6 +600,10 @@ class IndexedFile(SourceFile, SourceComponent):
         return 'Indexed file: {0} at {1}'.format(self.name, self.path)
 
 
+    #pass down to the filemanager
+    def __getattr__(self, item):
+        manager = self.MANAGER(self)
+        return getattr(manager, item)
 
     @property
     def _print(self):
