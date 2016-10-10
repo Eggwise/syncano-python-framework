@@ -1,0 +1,8 @@
+parse_tags:
+  ws: "[ |\\t]"
+  word: "[a-z.A-Z_]+"
+  comment: "[#|//]"
+  end_default: "\\s+"
+
+identifier:
+  end_tag: "{ws}+"
