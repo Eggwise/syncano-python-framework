@@ -91,6 +91,8 @@ class SourceIndexerBase:
     def _get_paths_by_identifiers(cls, identifiers: list):
         root_dir = cls._get_root_dir()
 
+        logging.info('searching for matching paths using the following identifiers: {0}'.format(identifiers))
+
         if len(set(identifiers)) < len(identifiers):
             print('WARNING: CHECKING FOR MATCHES WITH SAME IDENTIFIER')
             print('YOU WILL LOSE YOUR INDEX')
@@ -101,7 +103,7 @@ class SourceIndexerBase:
             for identifier in identifiers:
                 matches = [os.path.join(path, i) for i in dirs + files if str(i).endswith(identifier)]
                 matches_by_identifier[identifier].extend(matches)
-
+        logging.info('found {0} matches.'.format(len(matches)))
         return matches_by_identifier
 
     @classmethod
@@ -109,6 +111,7 @@ class SourceIndexerBase:
         logging.info('Retrieving indices')
         # get identifiers
 
+        logging.info('------------------')
         root_config = cls._get_root_config()
         root_index_config = root_config.yaml['index']
 
@@ -117,14 +120,24 @@ class SourceIndexerBase:
             logging.error(msg)
             raise AttributeError(msg)
 
+        types_with_identifiers = root_index_config['identifiers'].items()
         # flip
-        identifiers_with_types = {v: k for k, v in root_index_config['identifiers'].items()}
+        identifiers_with_types = {v: k for k, v in types_with_identifiers}
+
 
         # get identifier list
         identifiers = [v for k, v in root_index_config['identifiers'].items()]
         index_types = root_index_config['types']
 
-        if not len(identifiers) == len(index_types):
+        if len(identifiers) > len(index_types):
+            msg = 'NO INDEX TYPES DEFINED FOR THE IDENTIFIERS IN THE ROOT INDEX CONFIG\n\nthe following index types are defined\n' \
+                  '{0}'.format(index_types) + \
+                '\nthe following identifiers are defined: {0}\n'.format(root_index_config['identifiers'].items()) +\
+                'Check your root config file at: {0}'.format(root_config.path)
+            logging.error(msg)
+            raise Exception(msg)
+
+        if len(identifiers) < len(index_types):
             msg = 'NO IDENTIFIERS DEFINED FOR THE INDEX TYPES IN THE ROOT INDEX CONFIG\n\nthe following index types are defined\n' \
                   '{0}'.format(index_types) + \
                 '\nthe following identifiers are defined: {0}\n'.format(root_index_config['identifiers'].items()) +\
@@ -132,10 +145,14 @@ class SourceIndexerBase:
             logging.error(msg)
             raise Exception(msg)
 
-
+        logging.info('root config OK!')
+        logging.info('------------------')
+        logging.info('searching for index configuration files...')
         indices = []
+
         # get paths for indices
         indexed_paths = cls._get_paths_by_identifiers(identifiers)
+
         for identifier, paths in indexed_paths.items():
             # order them by type
             # indices_by_type[identifiers_with_types[identifier]] = paths
@@ -143,6 +160,7 @@ class SourceIndexerBase:
                 index_name = cls.extract_name(p, identifier)
                 index_config_file = SourceFile(name=index_name, path=p)
                 index = Index(index_name, identifiers_with_types[identifier], index_config_file)
+                logging.info('found index: {0}'.format(index))
                 indices.append(index)
 
         # merge parent configs for indices
@@ -150,8 +168,14 @@ class SourceIndexerBase:
         base_index_configs = {i.index_type: i for i in indices if i.name == 'root'}
 
         if len(base_index_configs) != len(index_types):
-            print('MISSING BASE INDEX FILE FOR {0}'.format([i for i in index_types if i not in base_index_configs]))
-            raise Exception()
+            msg = 'MISSING BASE CONFIG FILES FOR {0}\n'.format([i for i in index_types if i not in base_index_configs]) +\
+                  'Make sure you have a base index config named root somewhere in your workspace\n' \
+                  'Root index config files are needed to inherit from in your custom index files\n' \
+                  'You need the following root config files:\n{0}'.format('\n'.join(['root{0}'.format(i) for i in identifiers]))
+            logging.error(msg)
+            raise Exception(msg)
+
+        logging.info('found the base index config files: {0}'.format('\n'.join([i._print for i in base_index_configs])))
         merged_indices = []
         for index in [i for i in indices if i.name != 'root']:
             parent_config = base_index_configs[index.index_type]

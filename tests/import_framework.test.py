@@ -6,4 +6,3 @@ logging.basicConfig(level=1)
 
 source_manager.init()
 
-source_manager.from_this()
