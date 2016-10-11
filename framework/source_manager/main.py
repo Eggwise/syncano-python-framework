@@ -1,9 +1,8 @@
 from . import source_indexer
-import inspect
-
+from . import source_manager
 
 _source_indexer = source_indexer.SourceIndexer()
-find = _source_indexer.ok
+find = _source_indexer.refresh()
 at = find.at
 
 
@@ -29,7 +28,20 @@ def from_this():
     (frame, script_path, line_number,
      function_name, lines, index) = inspect.getouterframes(inspect.currentframe())[1]
 
-    indexer = _source_indexer.ok
-    return indexer.with_path(script_path)
+    indexer = _source_indexer
+    return indexer.at_path(script_path)
 
 
+
+
+
+
+#
+# #add all the attributes of the main package to the init.py for access
+# _current_module = sys.modules[__name__]
+#
+#
+# for i in dir(main):
+#     if not i.startswith('__'):
+#         setattr(_current_module, i, getattr(main, i))
+#

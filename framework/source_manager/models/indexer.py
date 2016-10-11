@@ -3,12 +3,9 @@ from typing import List
 import logging, copy
 
 
-from dist import source_manager
-
 from ..source_manager import FileManager
 
 
-from dev.utils import LOG_CONSTANTS
 
 ROOT_IDENTIFIER = '.config'
 
@@ -584,8 +581,6 @@ class Indices(Printable):
 
 
 class IndexedFile(SourceFile, SourceComponent):
-
-
 
     MANAGER = FileManager
 

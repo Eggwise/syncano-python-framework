@@ -1,9 +1,11 @@
-
 import importlib.util
 import logging
 import datetime, os
 
-# from .models.indexer import IndexedFile
+
+
+from .models.indexer import IndexedFile
+
 
 class SourceManagerBase():
     pass
