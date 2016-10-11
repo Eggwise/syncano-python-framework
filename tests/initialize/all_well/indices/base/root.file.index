@@ -1,0 +1,7 @@
+
+exclude:
+  - "__init__.py$"
+  - ".index$"
+  - ".pyc$"
+
+

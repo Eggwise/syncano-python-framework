@@ -152,7 +152,7 @@ class SourceIndexerBase:
 
         # get paths for indices
         indexed_paths = cls._get_paths_by_identifiers(identifiers)
-
+        logging.info('------------------')
         for identifier, paths in indexed_paths.items():
             # order them by type
             # indices_by_type[identifiers_with_types[identifier]] = paths
@@ -162,7 +162,7 @@ class SourceIndexerBase:
                 index = Index(index_name, identifiers_with_types[identifier], index_config_file)
                 logging.info('found index: {0}'.format(index))
                 indices.append(index)
-
+        logging.info('------------------')
         # merge parent configs for indices
         # order root configs by type
         base_index_configs = {i.index_type: i for i in indices if i.name == 'root'}
@@ -175,9 +175,28 @@ class SourceIndexerBase:
             logging.error(msg)
             raise Exception(msg)
 
-        logging.info('found the base index config files: {0}'.format('\n'.join([i._print for i in base_index_configs])))
+
+        child_indices = [i for i in indices if i.name != 'root']
+
+        logging.info('Found the base index config files:\n{0}'.format('\n'.join([i._print for i in indices if i.name == 'root'])))
+        logging.info('Found the child index config files:\n{0}'.format(
+            '\n'.join([i._print for i in child_indices])))
+
+        if len(child_indices) == 0:
+            msg = 'NO INDEX CONFIG FILES FOUND!\n' \
+                  'Have you created any?\nturn on logging INFO to see exactly what happens'
+            logging.error(msg)
+            raise Exception(msg)
+
+
+        logging.info('Merging the configs..')
+        logging.info('------------------')
+
+
+
+        child_indices = [i for i in indices if i.name != 'root']
         merged_indices = []
-        for index in [i for i in indices if i.name != 'root']:
+        for index in child_indices:
             parent_config = base_index_configs[index.index_type]
 
             #TODO
@@ -186,6 +205,9 @@ class SourceIndexerBase:
 
             index = Index(name=index.name, index_type=index.index_type, config_file=merged_index_config)
             merged_indices.append(index)
+
+
+        logging.info('\n--------------\nGET INDICES COMPLETE\n--------------')
         return Indices(merged_indices)
 
     @classmethod
