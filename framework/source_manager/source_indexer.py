@@ -3,12 +3,33 @@ import logging
 import os
 import re
 
-from .models.indexer import IndexedFile, SourceFile, IndexedItem, Source, Indexed, Index, Indices, Printable, SourceComponentContainer
+from framework.models.indexer import IndexedFile, SourceFile, IndexedItem, Source, Indexed, Index, Indices, Printable, SourceComponentContainer
 from ..utils import find_dirs, merge, LOG_CONSTANTS
+
+
 
 
 # @pretty_print
 class SourceIndexerBase:
+
+    CALLER_DIR = None
+
+    @classmethod
+    def prepare(cls, init_config):
+
+        caller_path = init_config['caller_path']
+        caller_dir = os.path.dirname(caller_path)
+        logging.info('PREPARE SOURCE INDEXER')
+        logging.info('-------------------------')
+        logging.info('Source indexer initialized from script at: >> {0} <<'.format(caller_path))
+        logging.info('The following dir will be used to seach the root config from: >> {0} <<'.format(caller_dir))
+
+
+        cls.CALLER_DIR = caller_dir
+        return cls
+
+
+
     config = {
         # root config for identifying the root config file in the workspace
         'config': {
@@ -32,16 +53,22 @@ class SourceIndexerBase:
 
     @classmethod
     def _get_root_config_path(cls):
-        indexer_location = os.path.realpath(os.path.dirname(__file__))
-        # print(indexer_location)
+        logging.info('Searching for root config path..')
+        logging.info('Walking up from the dir: {0}'.format(cls.CALLER_DIR))
+        indexer_location = cls.CALLER_DIR
+
         config_identifier = cls.config['config']['identifier']
         root_config_name = 'root'
         root_config_identifier = root_config_name + config_identifier
+
         root_dir_search = find_dirs(indexer_location, root_config_identifier)
         if len(root_dir_search) == 0:
-            print('NO ROOT CONFIG')
-            raise Exception('NO ROOT CONFIG')
+            error_message = 'NO ROOT CONFIG\nCould not find root config file\n searched from {0} \n upwards..'.format(indexer_location)
+            logging.error(error_message)
+            raise Exception(error_message)
         root_config_path = root_dir_search[0]
+
+        logging.info('Root config found at: {0}'.format(root_config_path))
         return root_config_path
 
     @classmethod
@@ -50,8 +77,13 @@ class SourceIndexerBase:
 
     @classmethod
     def _get_root_config(cls):
+        logging.info('Getting the root config..')
         root_config_path = cls._get_root_config_path()
+        #extract the name from the root config
+        #using the hardcoded index described in the config attribute of the class
         root_config_name = cls.extract_name(root_config_path, cls.config['config']['identifier'])
+
+        #if ever this assertion fails... something is terribly wrong
         assert root_config_name == 'root'
         return SourceFile(root_config_name, root_config_path)
 
@@ -74,14 +106,32 @@ class SourceIndexerBase:
 
     @classmethod
     def _get_indices(cls):
+        logging.info('Retrieving indices')
         # get identifiers
-        root_index_config = cls._get_root_config().yaml['index']
+
+        root_config = cls._get_root_config()
+        root_index_config = root_config.yaml['index']
+
+        if 'identifiers' not in root_index_config:
+            msg = 'MISSING IDENTIFIERS FOR INDICES TYPES IN ROOT INDEX CONFIG\n turn on logging to see more..'
+            logging.error(msg)
+            raise AttributeError(msg)
+
         # flip
         identifiers_with_types = {v: k for k, v in root_index_config['identifiers'].items()}
+
         # get identifier list
         identifiers = [v for k, v in root_index_config['identifiers'].items()]
         index_types = root_index_config['types']
-        assert len(identifiers) == len(index_types)
+
+        if not len(identifiers) == len(index_types):
+            msg = 'NO IDENTIFIERS DEFINED FOR THE INDEX TYPES IN THE ROOT INDEX CONFIG\n\nthe following index types are defined\n' \
+                  '{0}'.format(index_types) + \
+                '\nthe following identifiers are defined: {0}\n'.format(root_index_config['identifiers'].items()) +\
+                'Check your root config file at: {0}'.format(root_config.path)
+            logging.error(msg)
+            raise Exception(msg)
+
 
         indices = []
         # get paths for indices

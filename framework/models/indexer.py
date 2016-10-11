@@ -3,7 +3,7 @@ from typing import List
 import logging, copy
 
 
-from ..source_manager import FileManager
+from framework.source_manager.source_manager import FileManager
 
 
 
@@ -256,7 +256,7 @@ class SourceFile(SourceComponent):
 
     #helper to acces source attributes
     def __getattr__(self, attr):
-        logging.info('gettting attribute {0} from source file, passing it to the child source object'.format(attr))
+        logging.debug('gettting attribute {0} from source file, passing it to the child source object'.format(attr))
         return getattr(self.source, attr)
 
     def __len__(self):
