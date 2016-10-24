@@ -13,78 +13,18 @@ Features
 
 **no matter where and how/what your source is, manage and transform/compile it how you whish**
 
-#NOTE:
-## readme underneath here is outdated. dont use the examples.
-## documentation and tutorials coming soon
+# UPDATE
+This framework is build using the source framework: https://github.com/Eggwise/source_framework
+ATM, dont use this repo. the code will soon be split up to make it usable.
+to check out the source framework. clone the source framework test repo
+https://github.com/Eggwise/source_framework_test
+
+run generate_test.py to setup the framework
+then checkout the other test files.
 
 
-Example: Get a feeling
----
-A simple example of what you can do with this stuff
-as if i where you, jo.
+more examples, documentation and compilers coming soon,
 
-I create a person class dependency.
-I mark the dependency using the #dep.start tag (this is customizable) 
-(you can mark & compile anything in any file (or any file), but for now i use a python dependency as an example)
-
-**person.model.py**
-```
-#dep.start PersonModel
-
-class Person(SyncanoObject):
-  ....
-  ....
-  
-#dep.end 
-
-
-```
-
-
-Then in my awesome script you can develop like you normally would
-and compile it to scripts hosted on syncano.
-
-
-**test.script.py**
-```
-from models import PersonModel
-from project import source
-
-source.from_this().region('epic_script').inject.write('custom_name.py').deploy()
-source.stop
-
-
-#region.start epic_script
-
-#inject PersonModel
-
-(OR JUST USE)
----
-#injectable
-from models import PersonModel
---
-
-person = PersonModel(**ARGS)
-person.name = 'test'
-person.save
-
-#region.end epic_script
-
-
-
-```
-In this script i created an indexed item using the 'region' index and my . 
-This is the region i want to be compiled for deployment on my syncano instance.
-
-I mark the injection point for the person model.
-Or (more ez) i tag the import i want to be injected in my script at compilation.
-
-Then at the top of script i get the source manager from this script
-now i got the manager pointing at my script.
-i select the region i want to be compiled
-i inject the dependencies 
-i write to a custom file
-i then deploy the script
 
 
 
