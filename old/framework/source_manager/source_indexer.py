@@ -7,8 +7,6 @@ from framework.models.indexer import IndexedFile, SourceFile, IndexedItem, Sourc
 from ..utils import find_dirs, merge, LOG_CONSTANTS
 
 
-
-
 # @pretty_print
 class SourceIndexerBase:
 
@@ -419,7 +417,7 @@ class SourceIndexer(ItemIndexer, Printable, SourceComponentContainer):
         self.current = 0
 
     def __getattr__(self, name):
-        return self.filter(lambda x: x.match(name))
+        return self.filter(lambda x: x.match(name)) # type: SourceIndexer
 
 
 
@@ -464,8 +462,11 @@ class SourceIndexer(ItemIndexer, Printable, SourceComponentContainer):
             indexed_items = self._extract_items(file, item_indices)
             all_indexed_items.extend(indexed_items)
 
+
         all_indexed = Indexed(all_indexed_items, all_indexed_files)
         logging.info(LOG_CONSTANTS.REGION.format('INDEXING END'))
+        # print('all indexed files: {0}'.format(len(all_indexed_files)))
+
         logging.info(
             'indexed {0} source components using {1} indices'.format(len(all_indexed), len(self.indices)))
 
@@ -486,7 +487,17 @@ class SourceIndexer(ItemIndexer, Printable, SourceComponentContainer):
 
 
 
+    @property
+    def ok(self) -> Indexed:
+        #override for type hinting
+        return self.scoped
 
+
+    @property
+    def new(self):
+        copy = self.copy
+        copy.refresh()
+        return copy
 
     def refresh(self):
         self.indices.refresh()
@@ -561,11 +572,12 @@ class SourceIndexer(ItemIndexer, Printable, SourceComponentContainer):
 
 
     @property
-    def here(self):
+    def here(self) :
         (frame, script_path, line_number,
          function_name, lines, index) = inspect.getouterframes(inspect.currentframe())[1]
-        print(script_path)
-        return self.at_path(script_path)
+
+        logging.info('Scope source indexer to file at path: {0}'.format(script_path))
+        return self.at_path(script_path) #type: SourceIndexer
 
     def at(self, *source_components):
         #TODO file indexer at DIR
@@ -581,7 +593,7 @@ class SourceIndexer(ItemIndexer, Printable, SourceComponentContainer):
                         source_components_with_paths.append(s)
 
         instance = SourceIndexer(scoped=Indexed(*source_components_with_paths), index_all=False)
-        return instance
+        return instance  # type: SourceIndexer
 
     def extract_items(self, keep_scope=True):
         #TODO TEST
@@ -590,5 +602,5 @@ class SourceIndexer(ItemIndexer, Printable, SourceComponentContainer):
 
         extracted_items = [self._extract_items(f, indices) for f in files]
         self.scoped = Indexed(extracted_items)
-        return self
+        return self # type: SourceIndexer
 

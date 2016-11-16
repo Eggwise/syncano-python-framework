@@ -1,0 +1,5 @@
+start_tag: "imported"
+
+identifier:
+ start: "{comment}{start_tag}{ws}{word:name}"
+

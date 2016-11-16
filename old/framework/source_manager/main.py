@@ -8,7 +8,7 @@ _init_config = {
     'caller_path' : None
 }
 
-_source_indexer = None
+_source_indexer = None  # type: SourceIndexer
 
 def init():
     global _init_config
@@ -35,7 +35,7 @@ def init():
 def _check_initialized():
     global _init_config
     global _source_indexer
-    if _init_config['caller_path'] is not None:
+    if _init_config['caller_path'] is None:
         error_message = 'source manager is not initialized. call init() first'
         logging.error(error_message)
         raise Exception(error_message)
@@ -46,10 +46,10 @@ def _check_initialized():
         raise Exception(error_message)
 
 
-def find():
+def find() -> SourceIndexer:
     global _source_indexer
     _check_initialized()
-    return _source_indexer
+    return _source_indexer.new
 
 # find = _source_indexer.refresh()
 # at = find.at
@@ -76,7 +76,7 @@ def from_this():
      function_name, lines, index) = inspect.getouterframes(inspect.currentframe())[1]
 
     indexer = _source_indexer
-    return indexer.at_path(script_path)
+    return indexer.at_path(script_path)  # type: SourceIndexer
 
 
 

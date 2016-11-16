@@ -246,13 +246,13 @@ class SourceFile(SourceComponent):
         return os.path.basename(self.path)
 
     @property
-    def source(self):
+    def source(self) -> Source:
         return Source(self._source)
 
 
-    @property
-    def compile(self):
-        return source_manager.compiler(self)
+    # @property
+    # def compile(self):
+    #     return source_manager.compiler(self)
 
     #helper to acces source attributes
     def __getattr__(self, attr):
@@ -274,6 +274,7 @@ class SourceFile(SourceComponent):
                 +LOG_CONSTANTS.LINE.format(self.source._source) \
                 + LOG_CONSTANTS.REGION.format('SOURCE FILE END')
 
+
 class Indexed(Printable, SourceComponentContainer):
 
     def __iter__(self):
@@ -291,7 +292,11 @@ class Indexed(Printable, SourceComponentContainer):
 
         if isinstance(items, SourceComponentContainer):
             unpacked = cls._unpack(items.components, unpacked)
+            return unpacked
 
+
+        if len(items) == 0:
+            return unpacked
 
         for s in items:
             if isinstance(s, list):
@@ -314,7 +319,7 @@ class Indexed(Printable, SourceComponentContainer):
 
     def __init__(self, *source_components):
         self._components = self._unpack(source_components)
-        self.scoped = self._components
+        self.scoped = self._components # type: List[SourceComponent]
 
         for i in self._components:
             if not isinstance(i, SourceComponent):
@@ -380,7 +385,7 @@ class Indexed(Printable, SourceComponentContainer):
     #gets the result
 
     @property
-    def ok(self):
+    def ok(self) -> List[SourceComponent]:
         components = copy.copy(self.scoped)
         # self_to_return = Indexed(components)
         # self.refresh()
@@ -490,7 +495,6 @@ class Index(Matchable, Printable):
 
 
 
-
 class Indices(Printable):
 
     def __iter__(self):
@@ -596,13 +600,14 @@ class IndexedFile(SourceFile, SourceComponent):
 
 
     #pass down to the filemanager
-    def __getattr__(self, item):
+    def __getattr__(self, item) -> FileManager:
         manager = self.MANAGER(self)
         return getattr(manager, item)
 
     @property
     def _print(self):
         return 'indexed file: {2} >>> {0} <<< \t{1}'.format(self.name, self.path, self.index.name)
+
 
 
 
@@ -640,7 +645,7 @@ class IndexedItem(SourceComponent):
         return self.indexed_file
 
     @property
-    def source(self):
+    def source(self) -> Source:
         if self._source is None:
             file_source = self.indexed_file.source
             self._source = file_source[self.line_start: self.line_end]
